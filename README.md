@@ -6,7 +6,6 @@ Telegram bot for changing size images.
 
 Bot wrote by using aiogram and opencv libs.
 
----
 
 ## Using
 
@@ -35,8 +34,6 @@ Starting bot:
 ```Bash
 $ python main.py
 ```
-
----
 
 ## Contact 
 
