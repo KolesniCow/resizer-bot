@@ -18,7 +18,7 @@ def strech_image(buffer: io.BytesIO, w: int, h: int) -> bytes:
         bytes: bytes image in format .jpg
     """
     telegram_image = cv2.imdecode(np.frombuffer(buffer.read(), np.uint8), 1)
-    stratched_image = cv2.resize(telegram_image, (w, h))
+    stratched_image = cv2.resize(telegram_image, (w, h), interpolation=cv2.INTER_LANCZOS4)
     return cv2.imencode('.jpg', stratched_image)[1].tobytes()
 
 
