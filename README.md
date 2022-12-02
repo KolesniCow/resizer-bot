@@ -38,10 +38,13 @@ $ python main.py
 ### Contact 
 
 My telegram @kolesniCow
+
 My e-mail alexandr.kolesnikovv2@gmail.com
 
 ### Support me
 
 BTC: 1QDKXq7LmNrwkEjUAhoyRi2JFRc7inuycu
+
 LTC: LaXDsSMH2KhXtSWm1Wn7AoEjrWXgKv5f69
+
 TRX: TRpmeuE1d3nf3RB31VSyTMy6FbdTukULrr
