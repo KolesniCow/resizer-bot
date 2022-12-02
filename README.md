@@ -1,13 +1,14 @@
 ## Resizer
----
 
-### Description
+## Description
 
 Telegram bot for changing size images.
 
 Bot wrote by using aiogram and opencv libs.
 
-### Using
+---
+
+## Using
 
 Clone repo:
 
@@ -35,13 +36,15 @@ Starting bot:
 $ python main.py
 ```
 
-### Contact 
+---
+
+## Contact 
 
 My telegram @kolesniCow
 
 My e-mail alexandr.kolesnikovv2@gmail.com
 
-### Support me
+## Support me
 
 BTC: 1QDKXq7LmNrwkEjUAhoyRi2JFRc7inuycu
 
