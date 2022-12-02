@@ -17,7 +17,13 @@ dp = Dispatcher(bot, storage=storage)
 
 async def main():
     from handlers import dp
-    await dp.bot.set_my_commands([types.BotCommand('start', 'Start bot'),types.BotCommand('help', 'Give help information'),])
+    await dp.bot.set_my_commands(
+        [
+        types.BotCommand('start', 'Start bot'),
+        types.BotCommand('help', 'Give help information'),
+        types.BotCommand('menu', 'Menu')
+        ]
+        )
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

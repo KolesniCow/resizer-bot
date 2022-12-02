@@ -16,7 +16,8 @@ async def handler_help(message: types.Message):
     await message.answer(f'Bot given for change size you`re image \n'\
                          f'Commands: \n'\
                          f'/help - view all commands \n'\
-                         f'/menu - view menu'\
+                         f'/start - start bot \n'\
+                         f'/menu - view menu\n'\
                          f'GLHF Bro 👏👏👏')
 
 

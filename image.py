@@ -37,5 +37,5 @@ async def resize_photo(message: types.Message, h: int = 500, w: int = 500):
     file_info = await bot.get_file(message.photo[len(message.photo) - 1].file_id)
     downloaded = await bot.download_file(file_info.file_path)
     stretched_image = strech_image(downloaded, h=h, w=w)
-    await bot.send_photo(message.from_user.id, stretched_image)
+    await bot.send_document(message.from_user.id, ('image.jpg', stretched_image))
 
