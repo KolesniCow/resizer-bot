@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
-from menu import dp, bot
+from main import dp, bot
 from image import resize_photo
 from state import ResizeStates
 

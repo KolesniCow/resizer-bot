@@ -8,7 +8,7 @@ import menu
 async def start_bot(message: types.Message):
     await message.answer(f'Hello 👋 {message.from_user.first_name}!!!\n'\
                          f'Here you will be can resize you`re images',
-                         reply_markup=menu.greet_kb)
+                         reply_markup=menu.menu_resize_bot)
     
     
 @dp.message_handler(commands=["help"])
