@@ -18,12 +18,14 @@ async def get_width(message: types.Message, state: FSMContext):
     '''
     try:
         answer = int(message.text)
-        if answer < MAX_WIDTH:
+        if answer < MAX_WIDTH and answer != 0:
             await state.update_data(width=answer)
             await message.answer('Send 📏 height you`re new image:')
             await ResizeStatesCustom.get_height_state.set()
         else:
-            await message.answer('It so large!!! Try again: ')
+            await message.answer(
+                'It is either a lot or equal to 0.!!! Try again: '
+            )
             await ResizeStatesCustom.get_width_state.set()
     except (ValueError, TypeError):
         await message.answer('It seems to me what it no width in pixel.'
@@ -43,12 +45,14 @@ async def get_height(message: types.Message, state: FSMContext):
     '''
     try:
         answer = int(message.text)
-        if answer < MAX_HEIGHT:
+        if answer < MAX_HEIGHT and answer != 0:
             await state.update_data(height=answer)
             await message.answer('Success... Now, send me you`re image')
             await ResizeStatesCustom.get_image_state.set()
         else:
-            await message.answer('It so large!!! Try again: ')
+            await message.answer(
+                'It is either a lot or equal to 0.!!! Try again: '
+            )
             await ResizeStatesCustom.get_height_state.set()
     except (ValueError, TypeError):
         await message.answer('It seems to me what it no height in pixel.'
