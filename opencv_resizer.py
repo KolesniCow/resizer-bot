@@ -17,15 +17,26 @@ def strech_image(buffer: io.BytesIO, w: int, h: int) -> bytes:
     Returns:
         bytes: bytes image in format .jpg
     """
-    telegram_image = cv2.imdecode(np.frombuffer(buffer.read(), np.uint8), 1)
+    try:
+        if w != 0 and h != 0:
+            telegram_image = cv2.imdecode(
+                np.frombuffer(buffer.read(), np.uint8), 1
+            )
 
-    stratched_image = cv2.resize(
-        telegram_image,
-        (w, h),
-        interpolation=cv2.INTER_LANCZOS4
-    )
+            stratched_image = cv2.resize(
+                telegram_image,
+                (w, h),
+                interpolation=cv2.INTER_LANCZOS4
+            )
+            print('resizing image is complite')
 
-    return cv2.imencode('.jpg', stratched_image)[1].tobytes()
+            return cv2.imencode('.jpg', stratched_image)[1].tobytes()
+        else:
+            print('Width or height can`t equal 0')
+            return None
+    except (TypeError, ValueError, AttributeError):
+        print('Error image type is not byte')
+        return None
 
 
 async def resize_photo(message: types.Message, h: int = 500, w: int = 500):
