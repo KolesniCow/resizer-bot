@@ -4,7 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from settings import TOKEN
+from config import TOKEN
 
 logging.basicConfig(level=logging.INFO)
 
@@ -19,9 +19,9 @@ async def main():
     from handlers import dp
     await dp.bot.set_my_commands(
         [
-        types.BotCommand('start', 'Start bot'),
-        types.BotCommand('help', 'Give help information'),
-        types.BotCommand('menu', 'Menu')
+         types.BotCommand('start', 'Start bot'),
+         types.BotCommand('help', 'Give help information'),
+         types.BotCommand('menu', 'Menu')
         ]
         )
     await dp.start_polling(bot)
