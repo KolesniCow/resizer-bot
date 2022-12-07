@@ -2,8 +2,9 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from main import dp, bot
-from opencv_resizer import resize_photo
+from opencv_utils import resize_photo
 from state import ResizeStatesForTelegramFormat
+from keyboards import menu_resize_bot
 
 
 @dp.message_handler(
@@ -22,5 +23,10 @@ async def push_resized_image_for_telegram_sticker(message: types.Message,
     await bot.send_document(
         message.from_user.id,
         ('image.jpg', resized_photo)
+    )
+    await bot.send_message(
+        message.from_user.id,
+        'Take you`re result!!!',
+        reply_markup=menu_resize_bot,
     )
     await state.finish()

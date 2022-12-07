@@ -2,9 +2,10 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from main import dp, bot
-from opencv_resizer import resize_photo
+from opencv_utils import resize_photo
 from state import ResizeStatesCustom
 from config import MAX_WIDTH, MAX_HEIGHT
+from keyboards import menu_resize_bot
 
 
 @dp.message_handler(state=ResizeStatesCustom.get_width_state)
@@ -77,5 +78,9 @@ async def push_resized_image(message: types.Message, state: FSMContext):
         h=height['height']
     )
     await bot.send_document(message.from_user.id, ('image.jpg', resized_photo))
-    await bot.send_message(message.from_user.id, 'Take you`re changed image.')
+    await bot.send_message(
+        message.from_user.id,
+        'Take you`re result!!!',
+        reply_markup=menu_resize_bot,
+    )
     await state.finish()

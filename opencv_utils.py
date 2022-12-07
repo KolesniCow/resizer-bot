@@ -2,9 +2,10 @@ import io
 
 import cv2
 import numpy as np
+from aiogram import types
 
 from main import bot
-from aiogram import types
+from models import Quality, ExtensionFile, Filter
 
 
 def strech_image(buffer: io.BytesIO, w: int, h: int) -> bytes:
@@ -29,8 +30,9 @@ def strech_image(buffer: io.BytesIO, w: int, h: int) -> bytes:
                 interpolation=cv2.INTER_LANCZOS4
             )
             print('resizing image is complite')
-
-            return cv2.imencode('.jpg', stratched_image)[1].tobytes()
+            return cv2.imencode('.jpg', stratched_image,
+                                params=[cv2.IMWRITE_JPEG_QUALITY, 100]
+                                )[1].tobytes()
         else:
             print('Width or height can`t equal 0')
             return None
@@ -61,3 +63,35 @@ async def resize_photo(message: types.Message, h: int = 500, w: int = 500):
     downloaded = await bot.download_file(file_info.file_path)
     stretched_image = strech_image(downloaded, h=h, w=w)
     return stretched_image
+
+
+async def download_sticker(
+    sticker: types.Sticker,
+    quality: Quality = Quality.MEDIUM,
+    extension: ExtensionFile = ExtensionFile.JPG,
+    img_filter: Filter = None
+):
+    """Download telegram sticker
+
+    Args:
+        sticker (types.Message): sticker,
+        In aiogram sticker can take with message.sticker
+        quality (Quality): quality in module models
+        extension (ExtensionFile): extension in module models
+        img_filter (Filter): filter in module models
+
+    Returns:
+        sticker_image: bytes sticker
+    """
+    try:
+        buffer = io.BytesIO()
+        await sticker.download(destination_file=buffer)
+        image = cv2.imdecode(np.frombuffer(buffer.read(), np.uint8), 1)
+        image = cv2.imencode(
+            extension.value,
+            image,
+            params=[cv2.IMWRITE_JPEG_QUALITY, quality.value]
+        )[1].tobytes()
+        return image
+    except cv2.error:
+        return None
