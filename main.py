@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher, types
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.fsm.storage.memory import MemoryStorage
 
 from config import TOKEN
 
@@ -12,12 +12,12 @@ bot = Bot(token=TOKEN)
 
 storage = MemoryStorage()
 
-dp = Dispatcher(bot, storage=storage)
+dp = Dispatcher(storage=storage)
 
 
 async def main():
     from handlers import dp
-    await dp.bot.set_my_commands(
+    await bot.set_my_commands(
         [
          types.BotCommand('start', 'Start bot'),
          types.BotCommand('help', 'Give help information'),

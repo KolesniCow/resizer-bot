@@ -2,16 +2,14 @@
 
 ## Description
 
-Telegram bot for changing size images.
+Telegram bot for changing size images and downloading stickers in gif and jpeg fromat. (Animated stickers not supported.)
 
 Bot wrote by using aiogram and opencv libs.
 
 
 ## Using
 
-Clone repo:
-
-```Bash
+Clone repo: ```Bash
 $ git clone https://github.com/KolesniCow/resizer-bot.git
 $ cd resizer-bot
 ```

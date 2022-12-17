@@ -3,12 +3,17 @@ import io
 import cv2
 import numpy as np
 from aiogram import types
+import json
 
 from main import bot
-from models import Quality, ExtensionFile, Filter
+from models import Quality
 
 
-def strech_image(buffer: io.BytesIO, w: int, h: int) -> bytes:
+def resize_image(
+    buffer: io.BytesIO,
+    w: int, h: int, extension: str,
+    quality: Quality = Quality.MEDIUM,
+) -> bytes:
     """Stretching image in given width and higth
     Args:
         buffer (io.BytesIO): buffer with image
@@ -30,7 +35,7 @@ def strech_image(buffer: io.BytesIO, w: int, h: int) -> bytes:
                 interpolation=cv2.INTER_LANCZOS4
             )
             print('resizing image is complite')
-            return cv2.imencode('.jpg', stratched_image,
+            return cv2.imencode(extension, stratched_image,
                                 params=[cv2.IMWRITE_JPEG_QUALITY, 100]
                                 )[1].tobytes()
         else:
@@ -41,13 +46,23 @@ def strech_image(buffer: io.BytesIO, w: int, h: int) -> bytes:
         return None
 
 
-async def resize_photo(message: types.Message, h: int = 500, w: int = 500):
+def resize_gif(buffer: io.BytesIO, w: int, h: int):
+    fourcc = cv2.VideoWriter_fourcc('G', 'I', 'F')
+    cv2.VideoWriter(buffer, fourcc, 15.0, (w, h))
+    return buffer
+
+
+async def resize_content(
+    file_info: dict, extension: str,
+    content_type: str,
+    h: int = 500, w: int = 500
+):
     """
     Downloading telegram image, which is sent to the bot,
     and change width and height it.
 
     Args:
-        message (types.Message): message with photo
+        content (types.Message.photo or .document): message with photo
         h (int, optional): image height on output.
         Defaults to 500 becose it default sticker height px in telegram.
         w (int, optional): image width on output.
@@ -56,20 +71,19 @@ async def resize_photo(message: types.Message, h: int = 500, w: int = 500):
     Returns:
         stratched_image: bytes image
     """
-    file_info = await bot.get_file(
-        message.photo[len(message.photo) - 1].file_id
-    )
-
     downloaded = await bot.download_file(file_info.file_path)
-    stretched_image = strech_image(downloaded, h=h, w=w)
-    return stretched_image
+    if content_type == 'photo':
+        stretched_image = resize_image(
+            downloaded, h=h, w=w, extension=extension
+        )
+        return (f'image{extension}', stretched_image)
+    elif content_type == 'video':
+        video = resize_gif(downloaded, h=h, w=w)
+        return (f'video{extension}', video)
 
 
 async def download_sticker(
     sticker: types.Sticker,
-    quality: Quality = Quality.MEDIUM,
-    extension: ExtensionFile = ExtensionFile.JPG,
-    img_filter: Filter = None
 ):
     """Download telegram sticker
 
@@ -81,17 +95,14 @@ async def download_sticker(
         img_filter (Filter): filter in module models
 
     Returns:
-        sticker_image: bytes sticker
+        sticker_image: typle (file_name, bytes_image)
     """
-    try:
-        buffer = io.BytesIO()
-        await sticker.download(destination_file=buffer)
-        image = cv2.imdecode(np.frombuffer(buffer.read(), np.uint8), 1)
-        image = cv2.imencode(
-            extension.value,
-            image,
-            params=[cv2.IMWRITE_JPEG_QUALITY, quality.value]
-        )[1].tobytes()
-        return image
-    except cv2.error:
-        return None
+    buffer = io.BytesIO()
+    await sticker.download(destination_file=buffer)
+    is_video_sticker = json.loads(sticker.as_json())['is_video']
+    is_animated_sticker = json.loads(sticker.as_json())['is_animated']
+    print(is_animated_sticker)
+    if not is_video_sticker and not is_animated_sticker:
+        return ('image.jpeg', buffer.read())
+    elif is_video_sticker:
+        return ('gif.gif', buffer.read())
